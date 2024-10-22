@@ -10,7 +10,47 @@
 <body>
 	<div id='main-container'>
 		<div id='weather-container'>
+			<h4 id='date'>SATURDAY 14</h4>
+			<h2 id='city'>Weather for Your City</h2>
+			<div id ='weather-today'>
+				
+				<div id='weather-info'>
+					&nbsp;
+					<h2 id='condition-today'>sunny</h4>
+					<h1 style="font-size: 50px" id='temp-today'>76°</h1>
+					<h4 id="aqi-today">AQI: 1</h4>
+				</div>
+				<img id="weather-icon" src="./icons/01d.svg" alt="Weather Icon">
+			</div>
+			<div id="forecast-container">
+				<div class="forecast-day">
+					<h4>SUNDAY 15</h4>
+					<img src="./icons/10d.svg" alt="Cloudy">
+					<p class="forecast-temp">97° to 75°</p>
+				</div>
+				<div class="forecast-day">
+					<h4>MONDAY 16</h4>
+					<img src="./icons/10d.svg" alt="Cloudy">
+					<p class="forecast-temp">90° to 73°</p>
+				</div>
+				<div class="forecast-day">
+					<h4>TUESDAY 17</h4>
+					<img src="./icons/10d.svg" alt="Cloudy">
+					<p class="forecast-temp">93° to 71°</p>
+				</div>
+				<div class="forecast-day">
+					<h4>WEDNESDAY 18</h4>
+					<img src="./icons/10d.svg" alt="Cloudy">
+					<p class="forecast-temp">80° to 60°</p>
+				</div>
+				<div class="forecast-day">
+					<h4>THURSDAY 19</h4>
+					<img src="./icons/10d.svg" alt="Cloudy">
+					<p class="forecast-temp">77° to 69°</p>
+				</div>
 		</div> 
+		
+</div>
 	</div>
 	<div id='side-container'>
 		<div>
@@ -23,7 +63,7 @@
 
 <script>
 		// USE YOUR OWN API KEY
-		const apiKey = "";
+		const apiKey = "e62430578ca7062ed118ea65998b71d6";
 
         // variable that stores the city that is chosen
 		let city;
@@ -31,6 +71,12 @@
 		let weather;
         // the variable that stores the air quality index for the city
 		let aqi;
+
+		// window.onload = function() {
+		// 	document.querySelector("#date").innerHTML = "" + formatDate();
+		// 	console.log(formatDate());
+    	// 	document.querySelector("#city").innerHTML = "Weather for Your City";
+  		// };
 
 		// function that accepts that a number N and returns the name of the day and the date N days from now as a string
 		function formatDate(daysFromNow = 0) {
@@ -92,6 +138,7 @@
 			document.querySelector('#search-results-list').className = 'hidden'
 			// sets the global city variable
 			document.querySelector("#search-input").value = ''
+			document.querySelector("#city").innerHTML = "Weather for " + fullName;
 			city = {
 				fullName: fullName,
 				name: name,
@@ -102,6 +149,15 @@
 			//printing the city object to the console
 			console.log(city);
             // BEGIN CODING HERE
+			let apiCall = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=imperial`
+
+			fetch(apiCall)
+				.then((response) => response.json())
+				.then((data) => {
+					console.log(data);
+					// temp = data.main.temp;
+					// console.log(temp)
+				})
 		}
 	</script>
 </html>
