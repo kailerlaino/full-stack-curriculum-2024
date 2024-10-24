@@ -147,17 +147,57 @@
 				lon: lon
 			}
 			//printing the city object to the console
-			console.log(city);
-            // BEGIN CODING HERE
 			let apiCall = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=imperial`
 
 			fetch(apiCall)
 				.then((response) => response.json())
 				.then((data) => {
+
 					console.log(data);
-					// temp = data.main.temp;
-					// console.log(temp)
+
+					// update today's weather
+					let todayWeather = data.list[0]
+					document.querySelector('#temp-today').innerHTML = Math.round(todayWeather.main.temp) + "°";
+					document.querySelector('#condition-today').innerHTML = todayWeather.weather[0].description;
+					document.querySelector('#date').innerHTML = formatDate(0); // Update today's date
+
+
+					// update today's weather icon
+					let iconToday = todayWeather.weather[0].icon;
+            		document.querySelector("#weather-icon").src = `./icons/${iconToday}.svg`;
+
+					 // update the next 5 days
+					 const forecastDays = document.querySelectorAll('.forecast-day');
+				forecastDays.forEach((dayElement, index) => {
+					// skip the first element and go to the next day
+					let forecastWeather = data.list[(index + 1) * 8]; // Every 8th element is the next day (data is given in 3-hour intervals)
+					let tempMin = Math.round(forecastWeather.main.temp_min);
+					let tempMax = Math.round(forecastWeather.main.temp_max);
+					dayElement.querySelector('.forecast-temp').innerHTML = `${tempMax}° to ${tempMin}°`;
+
+					// Update the weather icon for each day
+					let icon = forecastWeather.weather[0].icon;
+					dayElement.querySelector('img').src = `./icons/${icon}.svg`;
+
+					// Update the date for each day
+					dayElement.querySelector('h4').innerHTML = formatDate(index + 1); // Increment day
+				});
+
+			})
+			
+			let apiCallAQI = `https://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${apiKey}`
+			fetch(apiCallAQI)
+				.then(response => response.json())
+				.then(data => {
+					console.log(data);
+					// Extract AQI information from the data
+					const aqi = data.list[0].main.aqi; // AQI value
+
+					// Display the AQI on your webpage
+					document.getElementById('aqi-today').innerText = `AQI: ${aqi}`;
 				})
+
 		}
+
 	</script>
 </html>
